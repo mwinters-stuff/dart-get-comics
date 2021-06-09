@@ -1,0 +1,22 @@
+config:
+  sender: person@example.com
+  smtp-server: smtp.gmail.com
+  smtp-port: 587
+  smtp-username: person@example.com
+  smtp-password: password
+comics:
+  - dilbert:
+      url: https://dilbert.com/strip?creator=Dilbert_Daily
+      to: 
+        - otherperson@example.com
+      date-seperator: "-"
+  - monty:
+      url: https://www.gocomics.com/monty
+      to: 
+        - otherperson@example.com
+  - fuzzy:
+      url: https://www.gocomics.com/getfuzzy
+      to:
+        - otherperson@example.com
+        - anotherperson@example.com
+
