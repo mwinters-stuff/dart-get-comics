@@ -1,5 +1,3 @@
-import 'dart:io' as io;
-
 import 'package:get_comics/emal_sender.dart';
 import 'package:get_comics/fetch_comic.dart';
 
@@ -13,7 +11,7 @@ Future<bool> getComics(config, comics) async {
       var to = <String>[];
       comic[comic.keys.first]['to'].forEach((e) => to.add(e));
       String? dateSepChar;
-      if (comic[comic.keys.first].keys.contains['date-seperator']) {
+      if (comic[comic.keys.first].keys.contains('date-seperator')) {
         dateSepChar = comic[comic.keys.first]['date-seperator'];
       }
 

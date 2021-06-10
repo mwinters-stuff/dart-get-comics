@@ -9,7 +9,7 @@
       "request": "launch",
       "type": "dart",
       "program": "bin/get_comics.dart",
-      "args": ["--config","comics-config.yaml"]
+      "args": ["--config","${workspaceRoot}/comics-config.yaml"]
 
     }
   ]

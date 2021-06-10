@@ -2,8 +2,7 @@ import 'dart:io' as io;
 
 import 'package:dcli/dcli.dart';
 import 'package:get_comics/emal_sender.dart';
-import 'package:universal_html/html.dart';
-import 'package:universal_html/parsing.dart';
+import 'package:html/parser.dart';
 
 Future<bool> fetchComic(String comicUrl, List<String> to,
     EmailSender emailSender, String? dateSepChar) async {
@@ -40,22 +39,23 @@ Future<bool> fetchComic(String comicUrl, List<String> to,
   fetch(url: url, saveToPath: comicFile);
 
   final contents = io.File(comicFile).readAsStringSync();
-  final htmlDocument = parseHtmlDocument(contents);
+  final htmlDocument = parse(contents);
 
-  var image = '';
-  var title = htmlDocument.title;
+  String? image = '';
+  String? title = htmlDocument.getElementsByTagName('title').first.text;
   htmlDocument.getElementsByTagName('meta').forEach((element) {
-    if (element is MetaElement) {
-      if (element.attributes.containsKey('name') &&
-          element.attributes['name'] == 'twitter:image') {
-        image = element.content;
-        return;
-      }
+    // if (element is MetaElement) {
+    if (element.attributes.containsKey('name') &&
+        element.attributes.containsKey('content') &&
+        element.attributes['name'] == 'twitter:image') {
+      image = element.attributes['content'];
+      return;
     }
+    //}
   });
   print('$title -> $image to $to');
-  if (title.isNotEmpty && image.isNotEmpty) {
-    return await emailSender.send(to, title, image);
+  if (title.isNotEmpty && image!.isNotEmpty) {
+    return await emailSender.send(to, title, image!);
   }
   return false;
 }
