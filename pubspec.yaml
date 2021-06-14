@@ -7,11 +7,21 @@ environment:
 
 dependencies: 
   dcli: ^1.5.3
+  dio: ^4.0.0
   html: ^0.15.0
+  http_mock_adapter: ^0.2.1
   mailer: ^5.0.0
   yaml: ^3.1.0
 
 
 dev_dependencies:
+  build_runner: any
+  build_test: any
+  mockito: any
   pedantic: ^1.11.0
   test: ^1.16.0
+  # test_coverage: 
+  #   # from: test-coverage
+  #   git: https://github.com/timsneath/test-coverage
+  
+

@@ -5,3 +5,5 @@
 # Conventional directory for build output.
 build/
 comics-config.yaml
+test/.test_coverage.dart
+reports/

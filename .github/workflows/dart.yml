@@ -37,7 +37,14 @@ jobs:
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
-      # want to change this to 'flutter test'.
+      # want to change this to 'flutter test'.--coverage reports/coverage
       - name: Build
-        run: dart compile exe --output get-comics bin/get_comics.dart
-        
+        run: dart test --file-reporter json:reports/tests.json 
+
+      - name: Test Reporter
+        uses: dorny/test-reporter@v1.4.3
+        if: success() || failure() 
+        with:
+          name: Dart Tests
+          path: reports/*.json
+          reporter: dart-json

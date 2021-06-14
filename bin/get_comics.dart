@@ -1,6 +1,7 @@
 import 'dart:io' as io;
 
 import 'package:dcli/dcli.dart';
+import 'package:get_comics/fetch_comic.dart';
 import 'package:get_comics/get_comics.dart';
 import 'package:yaml/yaml.dart';
 
@@ -14,9 +15,8 @@ void main(List<String> arguments) async {
     final config = yaml['config'];
     final comics = yaml['comics'];
 
-    if (!await getComics(config, comics)) {
+    if (!await getComics(FetchComic(), config, comics)) {
       io.exit(-1);
     }
-    ;
   }
 }

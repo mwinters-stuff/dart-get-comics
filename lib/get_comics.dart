@@ -1,7 +1,8 @@
-import 'package:get_comics/emal_sender.dart';
+import 'package:dio/dio.dart';
+import 'package:get_comics/email_sender.dart';
 import 'package:get_comics/fetch_comic.dart';
 
-Future<bool> getComics(config, comics) async {
+Future<bool> getComics(FetchComic fetchComic, config, comics) async {
   var sender = EmailSender(config['smtp-server'], config['smtp-port'],
       config['smtp-username'], config['smtp-password'], config['sender']);
 
@@ -15,7 +16,7 @@ Future<bool> getComics(config, comics) async {
         dateSepChar = comic[comic.keys.first]['date-seperator'];
       }
 
-      if (!await fetchComic(url, to, sender, dateSepChar)) {
+      if (!await fetchComic.fetchComic(url, to, Dio(), sender, dateSepChar)) {
         return false;
       }
     }
