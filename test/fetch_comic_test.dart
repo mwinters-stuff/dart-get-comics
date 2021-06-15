@@ -75,4 +75,39 @@ void main() {
           .called(1);
     });
   });
+
+  test('fails to decode url', () {
+    final fetchComic = FetchComic();
+    expect(fetchComic.makeComicUrl('s%41://x.x/', null), isNull);
+  });
+
+  test('fetchComicNoFindComic', () async {
+    await withClock(Clock.fixed(DateTime(2021, 05, 11)), () async {
+      dioAdapter.onGet(
+        'https://www.comics.com/fuzzy/2021/05/10',
+        (request) => request.reply(200,
+            '<html><title>A Comic</title><meta name="twitter:imagine" content="http://some.comic.image/12345"/>'),
+      );
+      final emailSender = MockEmailSender();
+
+      final fetchComic = FetchComic();
+      final value = await fetchComic.fetchComic('https://www.comics.com/fuzzy',
+          ['test@email'], dio, emailSender, null);
+      expect(value, false);
+
+      verifyZeroInteractions(emailSender);
+    });
+  });
+
+  test('fetchComicBadURL', () async {
+    await withClock(Clock.fixed(DateTime(2021, 05, 11)), () async {
+      final emailSender = MockEmailSender();
+      final fetchComic = FetchComic();
+      final value = await fetchComic.fetchComic(
+          's%41://x.x/', ['test@email'], dio, emailSender, null);
+      expect(value, false);
+
+      verifyZeroInteractions(emailSender);
+    });
+  });
 }
