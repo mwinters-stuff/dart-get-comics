@@ -20,8 +20,9 @@ dev_dependencies:
   mockito: any
   pedantic: ^1.11.0
   test: ^1.16.0
-  # test_coverage: 
-  #   # from: test-coverage
-  #   git: https://github.com/timsneath/test-coverage
+  test_coverage: 
+    git: 
+      url: https://github.com/timsneath/test-coverage
+      ref: 38ac26907341cead0f36f01582d08133369655d3
   
 

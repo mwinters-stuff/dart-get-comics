@@ -16,7 +16,7 @@
       "name": "coverate",
       "request": "launch",
       "type": "dart",
-      "program": "test-coverage/bin/test_coverage.dart",
+      "program": "dep/test-coverage/bin/test_coverage.dart",
       "args": ["--print-test-output"]
 
     }

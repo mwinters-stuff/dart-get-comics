@@ -7,3 +7,5 @@ build/
 comics-config.yaml
 test/.test_coverage.dart
 reports/
+coverage/
+coverage_badge.svg

@@ -48,3 +48,16 @@ jobs:
           name: Dart Tests
           path: reports/*.json
           reporter: dart-json
+
+      - name: fudge coverage of missed files
+        uses: stelynx/dart-full-coverage@v1.0.5
+        with:
+          package: get_comics
+      - name: run coverage
+        run: dart run test_coverage
+      - name: report coverage
+        uses: zgosalvez/github-actions-report-lcov@v1
+        with:
+          coverage-files: coverage/lcov*.info
+          artifact-name: code-coverage-report
+

@@ -224,7 +224,7 @@ packages:
       name: equatable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.3"
   ffi:
     dependency: transitive
     description:
@@ -575,6 +575,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.27"
+  test_coverage:
+    dependency: "direct dev"
+    description:
+      path: "."
+      ref: "38ac26907341cead0f36f01582d08133369655d3"
+      resolved-ref: "38ac26907341cead0f36f01582d08133369655d3"
+      url: "https://github.com/timsneath/test-coverage"
+    source: git
+    version: "0.6.0"
   timing:
     dependency: transitive
     description:
