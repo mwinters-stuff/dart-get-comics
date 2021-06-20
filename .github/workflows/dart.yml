@@ -68,8 +68,10 @@ jobs:
         run: dart compile exe -o get-comics-x86-64 bin/get_comics.dart
       - name: Release
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with: 
           files: |
             get-comics-x86-64
-            
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             
