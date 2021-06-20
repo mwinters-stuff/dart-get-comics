@@ -38,7 +38,7 @@ jobs:
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.--coverage reports/coverage
-      - name: Build
+      - name: Test
         run: dart test --file-reporter json:reports/tests.json 
 
       - name: Test Reporter
@@ -51,14 +51,25 @@ jobs:
 
       - name: fudge coverage of missed files
         uses: stelynx/dart-full-coverage@v1.0.5
+        if: success() || failure() 
         with:
           package: get_comics
       - name: run coverage
+        if: success() || failure() 
         run: dart run test_coverage
       - name: report coverage
         uses: zgosalvez/github-actions-report-lcov@v1
+        if: success() || failure() 
         with:
           coverage-files: coverage/lcov*.info
           artifact-name: code-coverage-report
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
+      - name: Build
+        run: dart compile exe -o get-comics-x86-64 bin/get_comics.dart
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with: 
+          files: |
+            get-comics-x86-64
+            
+            
