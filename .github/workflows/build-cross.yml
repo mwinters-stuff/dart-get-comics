@@ -15,6 +15,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:  
+        fetch-depth: 0  
       - name: Version  
         id: version  
         uses: juliansangillo/tag-version@v1  
@@ -22,16 +24,17 @@ jobs:
             production-branch: release
             test-branch: test  
             dev-branch: master
+      
       - name: Create Draft Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{steps.version.revision}}
+          tag_name: ${{steps.version.outputs.revision}}
           release_name: test
           draft: true
-          prerelease: ${{steps.version.is-prelease}}
+          prerelease: ${{steps.version.outputs.is-prelease}}
 
       - uses: uraimo/run-on-arch-action@v2.0.5
         name: Run Commands
