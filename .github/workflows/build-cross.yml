@@ -73,7 +73,7 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: /artifacts/get-comics-${{ matrix.distro }}_${{ matrix.arch }}.zip
           asset_name: get-comics-${{ matrix.distro }}_${{ matrix.arch }}.zip
-              asset_content_type: application/zip
+          asset_content_type: application/zip
 
       - uses: eregon/publish-release@v1
         env:
