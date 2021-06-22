@@ -67,15 +67,15 @@ jobs:
           
           run: |
             /dart-sdk/bin/dart pub get
-            /dart-sdk/bin/dart compile exe -o /artifacts/${artifact_name} bin/get_comics.dart 
-            cd /artifacts && zip ${artifact_name} ${artifact_name}
+            /dart-sdk/bin/dart compile exe -o ${artifact_name} bin/get_comics.dart 
+            zip ${artifact_name} ${artifact_name}
 
       - uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /artifacts/get-comics-arm64.zip
+          asset_path: get-comics-arm64.zip
           asset_name: get-comics-get-comics-arm64.zip
           asset_content_type: application/zip
 
