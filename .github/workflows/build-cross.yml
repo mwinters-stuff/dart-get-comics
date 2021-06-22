@@ -55,7 +55,8 @@ jobs:
 
           # Pass some environment variables to the container
           env: | # YAML, but pipe character is necessary
-            artifact_name: get-comics-${{ matrix.distro }}_${{ matrix.arch }}
+            artifact_name: get-comics-arm64
+          #  ${{ matrix.distro }}_${{ matrix.arch }}
           # The shell to run commands with in the container
           shell: /bin/sh
           install: |
@@ -74,8 +75,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /artifacts/get-comics-${{ matrix.distro }}_${{ matrix.arch }}.zip
-          asset_name: get-comics-${{ matrix.distro }}_${{ matrix.arch }}.zip
+          asset_path: /artifacts/get-comics-arm64.zip
+          asset_name: get-comics-get-comics-arm64.zip
           asset_content_type: application/zip
 
       - uses: eregon/publish-release@v1
