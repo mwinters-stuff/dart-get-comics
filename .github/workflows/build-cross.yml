@@ -56,7 +56,7 @@ jobs:
           # The shell to run commands with in the container
           shell: /bin/sh
           install: |
-            apt-get update -q -y && apt-get install -q -y wget bash unzip git
+            apt-get update -q -y && apt-get install -q -y wget bash unzip git zip
             wget https://storage.googleapis.com/dart-archive/channels/stable/release/2.13.3/sdk/dartsdk-linux-arm64-release.zip
             unzip dartsdk-linux-arm64-release.zip
             rm dartsdk-linux-arm64-release.zip
@@ -64,18 +64,20 @@ jobs:
           run: |
             /dart-sdk/bin/dart pub get
             /dart-sdk/bin/dart compile exe -o /artifacts/${artifact_name} bin/get_comics.dart 
+            cd /artifacts && zip ${artifact_name} ${artifact_name}
 
       - uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /artifacts/get-comics-${{ matrix.distro }}_${{ matrix.arch }}
-          asset_name: get-comics-${{ matrix.distro }}_${{ matrix.arch }}
-              # asset_content_type: application/binary
+          asset_path: /artifacts/get-comics-${{ matrix.distro }}_${{ matrix.arch }}.zip
+          asset_name: get-comics-${{ matrix.distro }}_${{ matrix.arch }}.zip
+              asset_content_type: application/zip
 
       - uses: eregon/publish-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           release_id: ${{ steps.create_release.outputs.id }}
+
