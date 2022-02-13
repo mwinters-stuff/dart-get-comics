@@ -13,7 +13,7 @@
 
     },
     {
-      "name": "coverate",
+      "name": "coverage",
       "request": "launch",
       "type": "dart",
       "program": "dep/test-coverage/bin/test_coverage.dart",

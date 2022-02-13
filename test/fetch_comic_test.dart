@@ -16,63 +16,45 @@ void main() {
   late DioAdapter dioAdapter;
   late Dio dio;
   setUpAll(() {
-    dioAdapter = DioAdapter();
+    dioAdapter = DioAdapter(dio: Dio());
     dio = Dio()..httpClientAdapter = dioAdapter;
   });
 
   test('makeComicUrl', () {
     withClock(Clock.fixed(DateTime(2021, 05, 11)), () {
       final fetchComic = FetchComic();
-      expect(fetchComic.makeComicUrl('https://www.comics.com/fuzzy', null),
-          'https://www.comics.com/fuzzy/2021/05/10');
-      expect(
-          fetchComic.makeComicUrl(
-              'https://www.comics.com/fuzzy?parameter=something', null),
-          'https://www.comics.com/fuzzy/2021/05/10?parameter=something');
+      expect(fetchComic.makeComicUrl('https://www.comics.com/fuzzy', null), 'https://www.comics.com/fuzzy/2021/05/10');
+      expect(fetchComic.makeComicUrl('https://www.comics.com/fuzzy?parameter=something', null), 'https://www.comics.com/fuzzy/2021/05/10?parameter=something');
 
-      expect(fetchComic.makeComicUrl('https://www.comics.com/fuzzy', '-'),
-          'https://www.comics.com/fuzzy/2021-05-10');
+      expect(fetchComic.makeComicUrl('https://www.comics.com/fuzzy', '-'), 'https://www.comics.com/fuzzy/2021-05-10');
 
-      expect(
-          fetchComic.makeComicUrl(
-              'https://www.comics.com/fuzzy?parameter=something', '-'),
-          'https://www.comics.com/fuzzy/2021-05-10?parameter=something');
+      expect(fetchComic.makeComicUrl('https://www.comics.com/fuzzy?parameter=something', '-'), 'https://www.comics.com/fuzzy/2021-05-10?parameter=something');
     });
   });
 
   test('getComicContent', () async {
     dioAdapter.onGet(
       'https://www.comics.com/fuzzy/2021/05/10',
-      (request) => request.reply(200,
-          '<html><title>A Comic</title><meta name="twitter:image" content="http://some.comic.image/12345"'),
+      (request) => request.reply(200, '<html><title>A Comic</title><meta name="twitter:image" content="http://some.comic.image/12345"'),
     );
     final fetchComic = FetchComic();
-    expect(
-        await fetchComic.getComicContent(
-            dio, 'https://www.comics.com/fuzzy/2021/05/10'),
-        '<html><title>A Comic</title><meta name="twitter:image" content="http://some.comic.image/12345"');
+    expect(await fetchComic.getComicContent(dio, 'https://www.comics.com/fuzzy/2021/05/10'), '<html><title>A Comic</title><meta name="twitter:image" content="http://some.comic.image/12345"');
   });
 
   test('fetchComic', () async {
     await withClock(Clock.fixed(DateTime(2021, 05, 11)), () async {
       dioAdapter.onGet(
         'https://www.comics.com/fuzzy/2021/05/10',
-        (request) => request.reply(200,
-            '<html><title>A Comic</title><meta name="twitter:image" content="http://some.comic.image/12345"/>'),
+        (request) => request.reply(200, '<html><title>A Comic</title><meta name="twitter:image" content="http://some.comic.image/12345"/>'),
       );
       final emailSender = MockEmailSender();
-      when(emailSender
-              .send(['test@email'], 'A Comic', 'http://some.comic.image/12345'))
-          .thenAnswer((_) => Future.value(true));
+      when(emailSender.send(['test@email'], 'A Comic', 'http://some.comic.image/12345')).thenAnswer((_) => Future.value(true));
 
       final fetchComic = FetchComic();
-      final value = await fetchComic.fetchComic('https://www.comics.com/fuzzy',
-          ['test@email'], dio, emailSender, null);
+      final value = await fetchComic.fetchComic('https://www.comics.com/fuzzy', ['test@email'], dio, emailSender, null);
       expect(value, true);
 
-      verify(emailSender
-              .send(['test@email'], 'A Comic', 'http://some.comic.image/12345'))
-          .called(1);
+      verify(emailSender.send(['test@email'], 'A Comic', 'http://some.comic.image/12345')).called(1);
     });
   });
 
@@ -85,14 +67,12 @@ void main() {
     await withClock(Clock.fixed(DateTime(2021, 05, 11)), () async {
       dioAdapter.onGet(
         'https://www.comics.com/fuzzy/2021/05/10',
-        (request) => request.reply(200,
-            '<html><title>A Comic</title><meta name="twitter:imagine" content="http://some.comic.image/12345"/>'),
+        (request) => request.reply(200, '<html><title>A Comic</title><meta name="twitter:imagine" content="http://some.comic.image/12345"/>'),
       );
       final emailSender = MockEmailSender();
 
       final fetchComic = FetchComic();
-      final value = await fetchComic.fetchComic('https://www.comics.com/fuzzy',
-          ['test@email'], dio, emailSender, null);
+      final value = await fetchComic.fetchComic('https://www.comics.com/fuzzy', ['test@email'], dio, emailSender, null);
       expect(value, false);
 
       verifyZeroInteractions(emailSender);
@@ -103,8 +83,7 @@ void main() {
     await withClock(Clock.fixed(DateTime(2021, 05, 11)), () async {
       final emailSender = MockEmailSender();
       final fetchComic = FetchComic();
-      final value = await fetchComic.fetchComic(
-          's%41://x.x/', ['test@email'], dio, emailSender, null);
+      final value = await fetchComic.fetchComic('s%41://x.x/', ['test@email'], dio, emailSender, null);
       expect(value, false);
 
       verifyZeroInteractions(emailSender);
