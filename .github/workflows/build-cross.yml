@@ -17,24 +17,25 @@ jobs:
       - uses: actions/checkout@v2
         with:  
           fetch-depth: 0  
-      - name: Version  
-        id: version  
-        uses: juliansangillo/tag-version@v1  
-        with:  
-            production-branch: release
-            test-branch: test  
-            dev-branch: master
       
+      -
+        id: version
+        name: version
+        run: |
+          output=$(date -u '+%Y%m%d%H%M%S')
+          echo ::set-output name=date_version::$output
+          echo "Version $output"
+
       - name: Create Draft Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{steps.version.outputs.revision}}
+          tag_name: ${{steps.version.outputs.date_version}}
           release_name: test
           draft: true
-          prerelease: ${{steps.version.outputs.is-prelease}}
+          prerelease: true
 
       - uses: uraimo/run-on-arch-action@v2.0.5
         name: Run Commands
@@ -61,7 +62,7 @@ jobs:
           shell: /bin/sh
           install: |
             apt-get update -q -y && apt-get install -q -y wget bash unzip git zip
-            wget https://storage.googleapis.com/dart-archive/channels/stable/release/2.13.3/sdk/dartsdk-linux-arm64-release.zip
+            wget https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-arm64-release.zip
             unzip dartsdk-linux-arm64-release.zip
             rm dartsdk-linux-arm64-release.zip
           
