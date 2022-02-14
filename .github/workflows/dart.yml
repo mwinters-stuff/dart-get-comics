@@ -58,7 +58,7 @@ jobs:
           package: get_comics
       - name: run coverage
         if: success() || failure() 
-        run: dart run test --coverage=./coverage
+        run: dart run test --coverage=coverage
       - name: report coverage
         uses: zgosalvez/github-actions-report-lcov@v1
         if: success() || failure() 
