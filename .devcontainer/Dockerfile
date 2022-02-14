@@ -1,6 +1,5 @@
-# Update VARIANT in devcontainer.json to pick a Dart version
 ARG VARIANT=2
-FROM google/dart:${VARIANT}
+FROM dart:${VARIANT}
 
 # [Option] Install zsh
 ARG INSTALL_ZSH="true"
@@ -18,6 +17,7 @@ RUN apt-get update && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL
 # Add bin location to path
 ENV PUB_CACHE="/usr/local/share/pub-cache"
 ENV PATH="${PUB_CACHE}/bin:${PATH}"
+RUN chmod a+rw /usr/lib/dart
 RUN if ! cat /etc/group | grep -e "^pub-cache:" > /dev/null 2>&1; then groupadd -r pub-cache; fi \
     && usermod -a -G pub-cache ${USERNAME} \
     && umask 0002 \

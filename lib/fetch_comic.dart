@@ -6,7 +6,7 @@ import 'package:html/parser.dart';
 
 class FetchComic {
   String? makeComicUrl(String comicUrl, String? dateSepChar) {
-    var now = clock.now().add(Duration(days: -1));
+    var now = clock.now().add(Duration(days: -2));
 
     var uri = Uri.tryParse(comicUrl);
     if (uri == null) {
@@ -17,7 +17,8 @@ class FetchComic {
     pathSegments.addAll(uri.pathSegments);
     if (dateSepChar != null) {
       pathSegments.add(
-          '${now.year.toString()}$dateSepChar${now.month.toString().padLeft(2, '0')}$dateSepChar${now.day.toString().padLeft(2, '0')}');
+        '${now.year.toString()}$dateSepChar${now.month.toString().padLeft(2, '0')}$dateSepChar${now.day.toString().padLeft(2, '0')}',
+      );
     } else {
       pathSegments.add(now.year.toString());
       pathSegments.add(now.month.toString().padLeft(2, '0'));
@@ -25,12 +26,12 @@ class FetchComic {
     }
 
     return Uri(
-            host: uri.host,
-            pathSegments: pathSegments,
-            port: uri.port,
-            query: uri.query,
-            scheme: uri.scheme)
-        .toString();
+      host: uri.host,
+      pathSegments: pathSegments,
+      port: uri.port,
+      query: uri.query,
+      scheme: uri.scheme,
+    ).toString();
   }
 
   Future<String> getComicContent(Dio dio, String url) async {
@@ -40,8 +41,13 @@ class FetchComic {
     return response.data.toString();
   }
 
-  Future<bool> fetchComic(String comicUrl, List<String> to, Dio dio,
-      EmailSender emailSender, String? dateSepChar) async {
+  Future<bool> fetchComic(
+    String comicUrl,
+    List<String> to,
+    Dio dio,
+    EmailSender emailSender,
+    String? dateSepChar,
+  ) async {
     final url = makeComicUrl(comicUrl, dateSepChar);
     if (url == null) {
       return false;
@@ -54,9 +60,7 @@ class FetchComic {
     String? image = '';
     String? title = htmlDocument.getElementsByTagName('title').first.text;
     htmlDocument.getElementsByTagName('meta').forEach((element) {
-      if (element.attributes.containsKey('name') &&
-          element.attributes.containsKey('content') &&
-          element.attributes['name'] == 'twitter:image') {
+      if (element.attributes.containsKey('name') && element.attributes.containsKey('content') && element.attributes['name'] == 'twitter:image') {
         image = element.attributes['content'];
         return;
       }

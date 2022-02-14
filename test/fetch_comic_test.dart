@@ -21,7 +21,7 @@ void main() {
   });
 
   test('makeComicUrl', () {
-    withClock(Clock.fixed(DateTime(2021, 05, 11)), () {
+    withClock(Clock.fixed(DateTime(2021, 05, 12)), () {
       final fetchComic = FetchComic();
       expect(fetchComic.makeComicUrl('https://www.comics.com/fuzzy', null), 'https://www.comics.com/fuzzy/2021/05/10');
       expect(fetchComic.makeComicUrl('https://www.comics.com/fuzzy?parameter=something', null), 'https://www.comics.com/fuzzy/2021/05/10?parameter=something');
@@ -42,7 +42,7 @@ void main() {
   });
 
   test('fetchComic', () async {
-    await withClock(Clock.fixed(DateTime(2021, 05, 11)), () async {
+    await withClock(Clock.fixed(DateTime(2021, 05, 12)), () async {
       dioAdapter.onGet(
         'https://www.comics.com/fuzzy/2021/05/10',
         (request) => request.reply(200, '<html><title>A Comic</title><meta name="twitter:image" content="http://some.comic.image/12345"/>'),
@@ -64,7 +64,7 @@ void main() {
   });
 
   test('fetchComicNoFindComic', () async {
-    await withClock(Clock.fixed(DateTime(2021, 05, 11)), () async {
+    await withClock(Clock.fixed(DateTime(2021, 05, 12)), () async {
       dioAdapter.onGet(
         'https://www.comics.com/fuzzy/2021/05/10',
         (request) => request.reply(200, '<html><title>A Comic</title><meta name="twitter:imagine" content="http://some.comic.image/12345"/>'),
