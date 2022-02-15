@@ -6,7 +6,7 @@ import 'package:html/parser.dart';
 
 class FetchComic {
   String? makeComicUrl(String comicUrl, String? dateSepChar) {
-    var now = clock.now().add(Duration(days: -2));
+    var now = clock.now().add(Duration(days: -1));
 
     var uri = Uri.tryParse(comicUrl);
     if (uri == null) {
