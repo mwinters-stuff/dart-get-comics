@@ -69,11 +69,18 @@ jobs:
       - name: Build
         run: dart compile exe -o get-comics-x86-64 bin/get_comics.dart
       - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with: 
+        uses: SierraSoftworks/gh-releases@v1.0.4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          overwrite: 'true'
           files: |
             get-comics-x86-64
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#         uses: softprops/action-gh-release@v1
+#         if: startsWith(github.ref, 'refs/tags/')
+#         with: 
+#           files: |
+#             get-comics-x86-64
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             
