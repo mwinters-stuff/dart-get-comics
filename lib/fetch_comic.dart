@@ -65,9 +65,13 @@ class FetchComic {
         return;
       }
     });
-    print('$title -> $image to $to');
-    if (title.isNotEmpty && image!.isNotEmpty) {
-      return await emailSender.send(to, title, image!);
+    if (image != null && image!.isNotEmpty) {
+      print('$title -> $image to $to');
+      if (title.isNotEmpty && image!.isNotEmpty) {
+        return await emailSender.send(to, title, image!);
+      }
+    } else {
+      print('$title -> no image found');
     }
     return false;
   }

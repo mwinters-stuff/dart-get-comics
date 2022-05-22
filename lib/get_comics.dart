@@ -16,7 +16,7 @@ Future<bool> getComics(FetchComic fetchComic, config, comics) async {
       }
 
       if (!await fetchComic.fetchComic(url.toString().trim(), to, Dio(), sender, dateSepChar)) {
-        return false;
+        print('Fetch ${url.toString().trim()} failed.');
       }
     }
   } finally {

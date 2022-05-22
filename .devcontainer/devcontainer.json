@@ -14,6 +14,7 @@
 		"dart-code.dart-code"
 	],
 
+  "containerEnv": { "TZ": "Pacific/Auckland" },
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
