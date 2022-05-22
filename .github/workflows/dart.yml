@@ -5,13 +5,9 @@
 
 name: Dart
 
-# on:
-  # push:
-  #   branches: [ master ]
-  # pull_request:
-  #   branches: [ master ]
 on:
-  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   build:
