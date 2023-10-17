@@ -8,6 +8,13 @@ name: Dart
 on:
   release:
     types: [published]
+  workflow_dispatch:
+
+
+permissions:
+  contents: write # needed to write releases
+  id-token: write # needed for keyless signing
+  packages: write # needed for ghcr access
 
 jobs:
   build:
