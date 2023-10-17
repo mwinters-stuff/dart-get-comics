@@ -10,3 +10,5 @@ reports/
 coverage/
 coverage_badge.svg
 get-comics
+bin/get_comics.exe
+get-comics-x86-64
