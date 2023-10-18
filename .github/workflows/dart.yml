@@ -36,18 +36,12 @@ jobs:
         run: dart compile exe -o get-comics-x86-64 bin/get_comics.dart
 
       - name: Release
-        uses: SierraSoftworks/gh-releases@v1.0.4
+        uses: SierraSoftworks/gh-releases@v1.0.7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           overwrite: 'true'
           files: |
             get-comics-x86-64
-
-      - name: Bump version and push tag
-        id: version
-        uses: hennejg/github-tag-action@v4.3.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Harbor
         uses: docker/login-action@v2
@@ -69,4 +63,4 @@ jobs:
           push: true
           tags: |
             harbor.winters.org.nz/public/get-comics:latest
-            harbor.winters.org.nz/public/get-comics:${{steps.version.outputs.new_version}}
+            harbor.winters.org.nz/public/get-comics:${{github.ref_name}}
