@@ -26,10 +26,12 @@ jobs:
       - uses: dart-lang/setup-dart@v1
       - name: Get Dependancies
         run: dart pub get
-      - name: Upgrade Dependancies
-        run: dart pub upgrade
+      # - name: Upgrade Dependancies
+      #   run: dart pub upgrade
       - name: Analyze
         run: dart analyze
+      - name: Test
+        run: dart test
       - name: Build
         run: dart compile exe -o get-comics-x86-64 bin/get_comics.dart
 

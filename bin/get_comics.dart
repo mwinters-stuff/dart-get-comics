@@ -1,6 +1,6 @@
 import 'dart:io' as io;
 
-import 'package:dcli/dcli.dart';
+import 'package:args/args.dart';
 import 'package:get_comics/fetch_comic.dart';
 import 'package:get_comics/get_comics.dart';
 import 'package:yaml/yaml.dart';
