@@ -13,24 +13,24 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
-	"containerEnv": {
-		"DART_HOME": "/opt/dart-sdk",
-		"DART_ROOT": "/opt/dart-sdk",
-		"PATH": "${localEnv:PATH}:/opt/dart-sdk/bin"
-	},
-	"remoteEnv": {
-		"DART_HOME": "/opt/dart-sdk",
-		"DART_ROOT": "/opt/dart-sdk",
-		"PATH": "${localEnv:PATH}:/opt/dart-sdk/bin"
-	},
-	// Configure tool-specific properties.
-	"customizations": {
-		"vscode": {
-			"settings": {
+	// "containerEnv": {
+	// 	"DART_HOME": "/opt/dart-sdk",
+	// 	"DART_ROOT": "/opt/dart-sdk",
+	// 	"PATH": "${localEnv:PATH}:/opt/dart-sdk/bin"
+	// },
+	// "remoteEnv": {
+	// 	"DART_HOME": "/opt/dart-sdk",
+	// 	"DART_ROOT": "/opt/dart-sdk",
+	// 	"PATH": "${localEnv:PATH}:/opt/dart-sdk/bin"
+	// },
+	// // Configure tool-specific properties.
+	// "customizations": {
+	// 	"vscode": {
+	// 		"settings": {
 				
-			}
-		}
-	},
+	// 		}
+	// 	}
+	// },
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
