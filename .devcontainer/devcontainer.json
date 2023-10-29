@@ -1,43 +1,28 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/debian
 {
-	"name": "Dart sdk",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"name": "Dart (Community)",
 	"build": {
-		"dockerfile": "Dockerfile"
+		"dockerfile": "Dockerfile",
+		// Update VARIANT to pick a Dart version
+		"args": { "VARIANT": "3" }
 	},
 
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"dart-code.dart-code"
+			]
+		}
+	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
-	// "containerEnv": {
-	// 	"DART_HOME": "/opt/dart-sdk",
-	// 	"DART_ROOT": "/opt/dart-sdk",
-	// 	"PATH": "${localEnv:PATH}:/opt/dart-sdk/bin"
-	// },
-	// "remoteEnv": {
-	// 	"DART_HOME": "/opt/dart-sdk",
-	// 	"DART_ROOT": "/opt/dart-sdk",
-	// 	"PATH": "${localEnv:PATH}:/opt/dart-sdk/bin"
-	// },
-	// // Configure tool-specific properties.
-	// "customizations": {
-	// 	"vscode": {
-	// 		"settings": {
-				
-	// 		}
-	// 	}
-	// },
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "uname -a",
 
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
-	"additionalProperties": {
-		"extensions": [
-			"dart-code.dart-code"
-		]
-	
-	}
+	// Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "vscode"
 }
