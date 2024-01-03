@@ -11,9 +11,9 @@ void main(List<String> arguments) async {
   var results = parser.parse(arguments);
 
   if (results['config'] != null) {
-    final yaml = loadYaml(io.File(results['config']).readAsStringSync());
-    final config = yaml['config'];
-    final comics = yaml['comics'];
+    final yaml = loadYamlDocument(io.File(results['config']).readAsStringSync());
+    final config = yaml.contents.value['config'];
+    final comics = yaml.contents.value['comics'];
 
     if (!await getComics(FetchComic(), config, comics)) {
       io.exit(-1);

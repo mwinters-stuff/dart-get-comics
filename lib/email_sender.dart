@@ -4,18 +4,16 @@ import 'package:mailer/smtp_server.dart';
 class EmailSender {
   final String smtp_server;
   final int smtp_port;
-  final String smtp_username;
-  final String smtp_password;
+  final String? smtp_username;
+  final String? smtp_password;
   final String sender;
 
   final SmtpServer _smtpServer;
 
   late PersistentConnection _connection;
 
-  EmailSender(this.smtp_server, this.smtp_port, this.smtp_username,
-      this.smtp_password, this.sender)
-      : _smtpServer = SmtpServer(smtp_server,
-            port: smtp_port, username: smtp_username, password: smtp_password) {
+  EmailSender(this.smtp_server, this.smtp_port, this.smtp_username, this.smtp_password, this.sender)
+      : _smtpServer = SmtpServer(smtp_server, port: smtp_port, username: smtp_username, password: smtp_password) {
     _connection = PersistentConnection(_smtpServer);
   }
 
@@ -40,9 +38,6 @@ class EmailSender {
   }
 
   void disconnect() {
-    _connection
-        .close()
-        .then((value) => print('Done'))
-        .onError((error, stackTrace) => print('Close Error: $error'));
+    _connection.close().then((value) => print('Done')).onError((error, stackTrace) => print('Close Error: $error'));
   }
 }
