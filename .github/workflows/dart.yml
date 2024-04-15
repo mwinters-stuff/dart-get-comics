@@ -39,13 +39,13 @@ jobs:
       - name: Build
         run: dart compile exe -o get-comics-x86-64 bin/get_comics.dart
 
-      - name: Release
-        uses: SierraSoftworks/gh-releases@v1.0.7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          overwrite: 'true'
-          files: |
-            get-comics-x86-64
+      # - name: Release
+      #   uses: SierraSoftworks/gh-releases@v1.0.7
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     overwrite: 'true'
+      #     files: |
+      #       get-comics-x86-64
 
       - name: Docker meta
         id: meta
