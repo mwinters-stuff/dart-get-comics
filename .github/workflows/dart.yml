@@ -7,12 +7,12 @@ name: Dart
 
 on:
   push:
-    branches:
-      - "**"
+    # branches:
+    #   - "**"
     tags:
       - "v*.*.*"    
-  pull_request:
-    branches: [ "master" ]
+  # pull_request:
+  #   branches: [ "master" ]
 
 
 permissions:
