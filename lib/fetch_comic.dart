@@ -57,22 +57,33 @@ class FetchComic {
 
     final htmlDocument = parse(contents);
 
-    String? image = '';
-    String? title = htmlDocument.getElementsByTagName('title').first.text;
-    htmlDocument.getElementsByTagName('meta').forEach((element) {
-      if (element.attributes.containsKey('name') && element.attributes.containsKey('content') && element.attributes['name'] == 'twitter:image') {
-        image = element.attributes['content'];
-        return;
-      }
-    });
-    if (image != null && image!.isNotEmpty) {
-      print('$title -> $image to $to');
-      if (title.isNotEmpty && image!.isNotEmpty) {
-        return await emailSender.send(to, title, image!);
-      }
-    } else {
-      print('$title -> no image found');
+    final imageElement =
+        htmlDocument.querySelector('img.Comic_comic__image__6e_Fw');
+    if (imageElement == null) {
+      throw Exception("Comic image URL not found");
     }
+
+    // Extract the correct src URL for width=1400 from srcset
+    String? srcSet = imageElement.attributes['srcset'];
+    if (srcSet != null) {
+      List<String> sources = srcSet.split(",");
+      for (var source in sources) {
+        var parts = source.trim().split(" ");
+        if (parts.length > 1 && parts[1].contains("1400w")) {
+          var image = parts[0];
+          String? title = htmlDocument.getElementsByTagName('title').first.text;
+          if (image.isNotEmpty) {
+            print('$title -> $image to $to');
+            if (title.isNotEmpty) {
+              return await emailSender.send(to, title, image);
+            }
+          } else {
+            print('$title -> no image found');
+          }
+        }
+      }
+    }
+
     return false;
   }
 }
