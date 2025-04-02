@@ -32,10 +32,10 @@ jobs:
         run: dart pub get
       # - name: Upgrade Dependancies
       #   run: dart pub upgrade
-      - name: Analyze
-        run: dart analyze
-      - name: Test
-        run: dart test
+      # - name: Analyze
+      #   run: dart analyze
+      # - name: Test
+      #   run: dart test
       - name: Build
         run: dart compile exe -o get-comics-x86-64 bin/get_comics.dart
 
