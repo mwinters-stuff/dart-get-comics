@@ -60,12 +60,14 @@ class FetchComic {
     final section = htmlDocument
         .querySelector("section[data-sentry-component=\"ShowComicViewer\"]");
     if (section == null) {
-      throw Exception("Comic image section URL not found");
+      print("Comic image section URL not found");
+      return false;
     }
 
     final imageElement = section.querySelector('img.Comic_comic__image__6e_Fw');
     if (imageElement == null) {
-      throw Exception("Comic image URL not found");
+      print("Comic image URL not found");
+      return false;
     }
 
     // Extract the correct src URL for width=1400 from srcset
