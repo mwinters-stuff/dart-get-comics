@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:get_comics/email_sender.dart';
 import 'package:get_comics/fetch_comic.dart';
 import 'package:yaml/yaml.dart';
 
-Future<bool> getComics(FetchComic fetchComic, YamlMap config, YamlList comics) async {
+Future<bool> getComics(
+    FetchComic fetchComic, YamlMap config, YamlList comics) async {
   String? smtpUsername;
   String? smtpPassword;
 
@@ -12,7 +15,8 @@ Future<bool> getComics(FetchComic fetchComic, YamlMap config, YamlList comics) a
     smtpPassword = config['smtp-password'];
   }
 
-  var sender = EmailSender(config['smtp-server'], config['smtp-port'], smtpUsername, smtpPassword, config['sender']);
+  var sender = EmailSender(config['smtp-server'], config['smtp-port'],
+      smtpUsername, smtpPassword, config['sender']);
 
   try {
     for (var comic in comics) {
@@ -24,8 +28,15 @@ Future<bool> getComics(FetchComic fetchComic, YamlMap config, YamlList comics) a
         dateSepChar = comic[comic.keys.first]['date-seperator'];
       }
 
-      if (!await fetchComic.fetchComic(url.toString().trim(), to, Dio(), sender, dateSepChar)) {
-        print('Fetch ${url.toString().trim()} failed.');
+      for (var i = 0; i < 5; i++) {
+        if (!await fetchComic.fetchComic(
+            url.toString().trim(), to, Dio(), sender, dateSepChar)) {
+          print(
+              'Fetch ${url.toString().trim()} failed. Sleeping 62 seconds, step $i');
+          sleep(Duration(seconds: 62));
+        } else {
+          break;
+        }
       }
     }
   } finally {

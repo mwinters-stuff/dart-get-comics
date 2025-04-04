@@ -8,8 +8,9 @@
             "name": "Launch Server",
             "type": "dart",
             "request": "launch",
-            "program": "bin/get_comics.dart",
-            "args": ["--config","comics-config.yaml"]
+            "program": "${workspaceFolder}/bin/get_comics.dart",
+            "args": ["--config","${workspaceFolder}/comics-config.yaml"],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
