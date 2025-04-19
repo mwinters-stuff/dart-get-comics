@@ -1,5 +1,6 @@
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
+import 'package:intl/intl.dart'; // Add this import for date formatting
 
 class EmailSender {
   final String smtp_server;
@@ -18,11 +19,14 @@ class EmailSender {
   }
 
   Future<bool> send(List<String> to, String subject, String imageUrl) async {
+    final String currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    final String updatedSubject = "$subject - $currentDate";
+
     final message = Message()
       ..from = Address(sender, 'Comics Mailer')
       ..recipients.addAll(to)
-      ..subject = subject
-      ..html = "<H1>$subject</H1><BR><img src='$imageUrl'>";
+      ..subject = updatedSubject
+      ..html = "<H1>$updatedSubject</H1><BR><img src='$imageUrl'>";
 
     try {
       final sendReport = await _connection.send(message);

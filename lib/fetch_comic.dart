@@ -58,13 +58,13 @@ class FetchComic {
     final htmlDocument = parse(contents);
 
     final section = htmlDocument
-        .querySelector("section[data-sentry-component=\"ShowComicViewer\"]");
+        .querySelector("section[class^='ShowComicViewer_showComicViewer']");
     if (section == null) {
       print("Comic image section URL not found");
       return false;
     }
 
-    final imageElement = section.querySelector('img.Comic_comic__image__6e_Fw');
+    final imageElement = section.querySelector("img[class^='Comic_comic__image']");
     if (imageElement == null) {
       print("Comic image URL not found");
       return false;

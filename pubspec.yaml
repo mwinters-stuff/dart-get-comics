@@ -12,6 +12,7 @@ dependencies:
   http_mock_adapter: ^0.6.0
   mailer: ^6.0.1
   yaml: ^3.1.0
+  intl: ^0.18.0
 
 
 dev_dependencies:
