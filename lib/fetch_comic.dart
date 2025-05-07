@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:clock/clock.dart';
 
 import 'package:dio/dio.dart';
@@ -64,31 +66,21 @@ class FetchComic {
       return false;
     }
 
-    final imageElement = section.querySelector("img[class^='Comic_comic__image']");
-    if (imageElement == null) {
-      print("Comic image URL not found");
-      return false;
-    }
+    final scriptTag = section.querySelector('script[type="application/ld+json"]');
 
-    // Extract the correct src URL for width=1400 from srcset
-    String? srcSet = imageElement.attributes['srcset'];
-    if (srcSet != null) {
-      List<String> sources = srcSet.split(",");
-      for (var source in sources) {
-        var parts = source.trim().split(" ");
-        if (parts.length > 1 && parts[1].contains("1400w")) {
-          var image = parts[0];
-          String? title = htmlDocument.getElementsByTagName('title').first.text;
-          if (image.isNotEmpty) {
-            print('$title -> $image to $to');
-            if (title.isNotEmpty) {
-              return await emailSender.send(to, title, image);
-            }
-          } else {
-            print('$title -> no image found');
-          }
-        }
-      }
+    if (scriptTag != null) {
+      // Parse the JSON-LD content
+      final jsonData = jsonDecode(scriptTag.text);
+
+      // Extract the name and contentUrl
+      final name = jsonData['name'];
+      final contentUrl = jsonData['contentUrl'];
+
+      print('Name: $name');
+      print('Content URL: $contentUrl');
+      return await emailSender.send(to, name, contentUrl);
+    } else {
+      print('No JSON-LD script tag found.');
     }
 
     return false;
