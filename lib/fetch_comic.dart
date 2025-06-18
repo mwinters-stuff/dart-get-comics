@@ -57,32 +57,18 @@ class FetchComic {
 
     final contents = await getComicContent(dio, url);
 
-    final htmlDocument = parse(contents);
+    final document = parse(contents);
+  
+    // Extract og:title and og:image
+    final ogTitle = document
+        .querySelector('meta[property="og:title"]')
+        ?.attributes['content'];
+    final ogImage = document
+        .querySelector('meta[property="og:image"]')
+        ?.attributes['content'];
 
-    final section = htmlDocument
-        .querySelector("section[class^='ShowComicViewer_showComicViewer']");
-    if (section == null) {
-      print("Comic image section URL not found");
-      return false;
-    }
-
-    final scriptTag = section.querySelector('script[type="application/ld+json"]');
-
-    if (scriptTag != null) {
-      // Parse the JSON-LD content
-      final jsonData = jsonDecode(scriptTag.text);
-
-      // Extract the name and contentUrl
-      final name = jsonData['name'];
-      final contentUrl = jsonData['contentUrl'];
-
-      print('Name: $name');
-      print('Content URL: $contentUrl');
-      return await emailSender.send(to, name, contentUrl);
-    } else {
-      print('No JSON-LD script tag found.');
-    }
-
-    return false;
+    print('Name: $ogTitle');
+    print('Content URL: $ogImage');
+    return await emailSender.send(to, ogTitle!, ogImage!);
   }
 }
