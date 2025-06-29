@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:clock/clock.dart';
 
 import 'package:dio/dio.dart';
@@ -38,9 +36,15 @@ class FetchComic {
 
   Future<String> getComicContent(Dio dio, String url) async {
     print('url $url');
-
-    final response = await dio.get(url);
-    return response.data.toString();
+    try {
+      final response = await dio.get(url);
+      return response.data.toString();
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return '404';
+      }
+    }
+    return '';
   }
 
   Future<bool> fetchComic(
@@ -56,9 +60,13 @@ class FetchComic {
     }
 
     final contents = await getComicContent(dio, url);
+    if(contents == '404'){
+      print('returned 404, ignoring');
+      return true; // pretend it worked.
+    }
 
     final document = parse(contents);
-  
+
     // Extract og:title and og:image
     final ogTitle = document
         .querySelector('meta[property="og:title"]')
