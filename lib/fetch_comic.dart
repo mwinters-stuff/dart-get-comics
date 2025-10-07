@@ -1,6 +1,5 @@
 import 'package:clock/clock.dart';
-
-import 'package:dio/dio.dart';
+import 'package:puppeteer/puppeteer.dart';
 import 'package:get_comics/email_sender.dart';
 import 'package:html/parser.dart';
 
@@ -34,23 +33,40 @@ class FetchComic {
     ).toString();
   }
 
-  Future<String> getComicContent(Dio dio, String url) async {
+  Future<String> getComicContentWithPuppeteer(String url) async {
     print('url $url');
+    Browser? browser;
     try {
-      final response = await dio.get(url);
-      return response.data.toString();
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 404) {
-        return '404';
-      }
+      browser = await puppeteer.launch(
+        headless: true,
+        executablePath: '/usr/bin/chromium',
+        args: [
+          '--no-sandbox',
+          '--disable-blink-features=AutomationControlled',
+        ],
+      );
+      var page = await browser.newPage();
+      await page.setUserAgent(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      );
+      await page.setViewport(DeviceViewport(width: 1280, height: 800));
+      var watchTitle = page.waitForSelector('meta[property="og:title"]');
+      await page.goto(url, wait: Until.networkIdle);
+      await watchTitle;
+      final content = await page.content;
+      return content!;
+    } catch (e) {
+      print('Puppeteer error: $e');
+      return '';
+    } finally {
+      await browser?.close();
     }
-    return '';
   }
 
   Future<bool> fetchComic(
     String comicUrl,
     List<String> to,
-    Dio dio,
+    dynamic dio, // Not used anymore, kept for compatibility
     EmailSender emailSender,
     String? dateSepChar,
   ) async {
@@ -59,10 +75,10 @@ class FetchComic {
       return false;
     }
 
-    final contents = await getComicContent(dio, url);
-    if(contents == '404'){
-      print('returned 404, ignoring');
-      return true; // pretend it worked.
+    final contents = await getComicContentWithPuppeteer(url);
+    if (contents.isEmpty) {
+      print('Failed to fetch content, ignoring');
+      return false;
     }
 
     final document = parse(contents);
@@ -77,6 +93,10 @@ class FetchComic {
 
     print('Name: $ogTitle');
     print('Content URL: $ogImage');
-    return await emailSender.send(to, ogTitle!, ogImage!);
+    if (ogTitle == null || ogImage == null || ogTitle.isEmpty || ogImage.isEmpty) {
+      print('Failed to extract og:title or og:image');
+      return false;
+    }
+    return await emailSender.send(to, ogTitle, ogImage);
   }
 }
